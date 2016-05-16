@@ -1,8 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class MainSceneManager : MonoBehaviour {
-
+public class PlaySceneManager : MonoBehaviour {
 
 	public enum LAYER_TYPE 
 	{
@@ -108,8 +107,8 @@ public class MainSceneManager : MonoBehaviour {
 		}
 	}
 
-	private static MainSceneManager instance;
-	public static MainSceneManager Instance
+	private static PlaySceneManager instance;
+	public static PlaySceneManager Instance
 	{
 		get 
 		{

@@ -19,13 +19,13 @@ public class HardModeLayer : MonoBehaviour {
 	private UIButton m_GoBtn;
 
 	//Variables
-	private const int NUMBER_CNT = 4;
+	private const int BALL_CNT = 4;
 
 	private int m_ballCnt;
 	private float m_timer;
 
-	private int m_answer;
-	private int[] m_inputNumber = new int[4];
+	private int[] m_answer = new int[BALL_CNT];
+	private int[] m_inputNumber = new int[BALL_CNT];
 
 	private void OnGetChildObject() 
 	{
@@ -37,22 +37,22 @@ public class HardModeLayer : MonoBehaviour {
 				//슬롯 1
 				Transform slot = child.FindChild ("Slotnumber_1").GetComponent< Transform > ();
 				m_slot1 = slot.FindChild ("Grid").gameObject;
-				m_slot1.GetComponent< UICenterOnChild > ().onFinished = GoBtnOnOffCheck;
+				m_slot1.GetComponent< UICenterOnChild > ().onCenter = GoBtnOnOffCheck;
 
 				//슬롯 2
 				slot = child.FindChild ("Slotnumber_2").GetComponent< Transform > ();
 				m_slot2 = slot.FindChild ("Grid").gameObject;
-				m_slot2.GetComponent< UICenterOnChild > ().onFinished = GoBtnOnOffCheck;
+				m_slot2.GetComponent< UICenterOnChild > ().onCenter = GoBtnOnOffCheck;
 
 				//슬롯 3
 				slot = child.FindChild ("Slotnumber_3").GetComponent< Transform > ();
 				m_slot3 = slot.FindChild ("Grid").gameObject;
-				m_slot3.GetComponent< UICenterOnChild > ().onFinished = GoBtnOnOffCheck;
+				m_slot3.GetComponent< UICenterOnChild > ().onCenter = GoBtnOnOffCheck;
 
 				//슬롯 4
 				slot = child.FindChild ("Slotnumber_4").GetComponent< Transform > ();
 				m_slot4 = slot.FindChild ("Grid").gameObject;
-				m_slot4.GetComponent< UICenterOnChild > ().onFinished = GoBtnOnOffCheck;
+				m_slot4.GetComponent< UICenterOnChild > ().onCenter = GoBtnOnOffCheck;
 				break;
 
 			case "Btn_bg":
@@ -76,6 +76,33 @@ public class HardModeLayer : MonoBehaviour {
 		}
 	}
 
+	private void SetRandomAnswer()
+	{
+		//random number generate
+		int[] number = new int[10];
+
+		for(int i = 0; i < 10; i++) 
+		{
+			number [i] = i;
+		}
+
+		for(int i = 0; i < 10; i++) 
+		{
+			int dest = UnityEngine.Random.Range (0, 10);
+
+			int temp = number [i];
+			number [i] = number [dest];
+			number [dest] = temp;
+		}
+
+		for (int i = 0; i < BALL_CNT; i++) 
+		{
+			m_answer [i] = number [i];
+		}
+		Debug.Log (m_answer[0].ToString() + m_answer[1].ToString() + m_answer[2].ToString() + m_answer[3].ToString());
+
+	}
+
 	private void GetInputNumber()
 	{
 		int inputNumber;
@@ -83,15 +110,22 @@ public class HardModeLayer : MonoBehaviour {
 		int input1, input2, input3, input4;
 
 		string inputObjectName;
+
+		if (m_slot1.GetComponent< UICenterOnChild > ().centeredObject == null ||
+			m_slot2.GetComponent< UICenterOnChild > ().centeredObject == null ||
+			m_slot3.GetComponent< UICenterOnChild > ().centeredObject == null ||
+			m_slot4.GetComponent< UICenterOnChild > ().centeredObject == null)
+			return;
+
 		inputObjectName = m_slot1.GetComponent< UICenterOnChild > ().centeredObject.name;
 		input1 = Convert.ToInt32 (inputObjectName);
 
 		inputObjectName = m_slot2.GetComponent< UICenterOnChild > ().centeredObject.name;
 		input2 = Convert.ToInt32 (inputObjectName);
-
+	
 		inputObjectName = m_slot3.GetComponent< UICenterOnChild > ().centeredObject.name;
 		input3 = Convert.ToInt32 (inputObjectName);
-
+	
 		inputObjectName = m_slot4.GetComponent< UICenterOnChild > ().centeredObject.name;
 		input4 = Convert.ToInt32 (inputObjectName);
 
@@ -107,9 +141,9 @@ public class HardModeLayer : MonoBehaviour {
 	{
 		GetInputNumber ();
 		
-		for (int i = 0; i < NUMBER_CNT-1; i++) 
+		for (int i = 0; i < BALL_CNT-1; i++) 
 		{
-			for (int j = (i + 1); j < NUMBER_CNT; j++) 
+			for (int j = (i + 1); j < BALL_CNT; j++) 
 			{
 				if (m_inputNumber [i] == m_inputNumber [j])
 					return false;
@@ -119,7 +153,43 @@ public class HardModeLayer : MonoBehaviour {
 		return true;		
 	}
 
-	public void GoBtnOnOffCheck()
+	private void CheckAnswer()
+	{
+		int strikeCnt = 0, ballCnt = 0, outCnt = 0;
+
+		for(int i = 0; i < BALL_CNT; i++)
+		{
+			for(int j = 0; j < BALL_CNT; j++)
+			{
+				if(m_inputNumber[i] == m_answer[j])
+				{
+					if( i == j)
+						strikeCnt++;
+					else
+						ballCnt++;
+
+					break;
+				}
+				if(j == BALL_CNT-1)
+					outCnt++;
+			}
+		}
+
+		if(outCnt == 4)
+		{
+			Debug.Log ("OUT");
+		}
+		else if ( strikeCnt == 4 )
+		{
+			Debug.Log ("HomeRun");
+		}
+		else
+		{
+			Debug.Log (strikeCnt.ToString () + "S " + ballCnt.ToString () + "B 입니다");
+		}
+	}
+
+	public void GoBtnOnOffCheck(GameObject centeredObject)
 	{
 		if (DuplicationCheck () == true) 
 		{
@@ -134,11 +204,13 @@ public class HardModeLayer : MonoBehaviour {
 	public void OnClickedGo()
 	{
 		GetInputNumber ();
+		CheckAnswer ();
 	}
 
 	void Awake() 
 	{
 		OnGetChildObject ();
+		SetRandomAnswer ();
 
 		m_timerLabel.text = "120";
 		m_ballCntLabel.text = "6";
