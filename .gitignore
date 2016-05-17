@@ -27,10 +27,4 @@ MNBProject/Assets/NGUI
 #Build/Android/unity-android-resources/gen
 #Build/Android/unity-android-resources/res
 
-#Build/Android/KBOmanager/assets
-#Build/Android/KBOmanager/libs
-#Build/Android/KBOmanager/res
-#Build/Android/KBOmanager/src
-#Build/Android/KBOmanager/gen
-#Build/Android/KBOmanager/bin
 #launch.json
