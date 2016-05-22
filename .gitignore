@@ -2,7 +2,7 @@ MNBProject/Assembly-CSharp-Editor-vs.csproj
 MNBProject/Assembly-CSharp-Editor.csproj
 MNBProject/Assembly-CSharp-vs.csproj
 MNBProject/Assembly-CSharp.csproj
-MNBProject/MNB.sln
+MNBProject/MNBProject.sln
 MNBProject/Assembly-CSharp-firstpass-vs.csproj
 MNBProject/Assembly-CSharp-firstpass.csproj
 
@@ -27,10 +27,4 @@ MNBProject/Assets/NGUI
 #Build/Android/unity-android-resources/gen
 #Build/Android/unity-android-resources/res
 
-#Build/Android/KBOmanager/assets
-#Build/Android/KBOmanager/libs
-#Build/Android/KBOmanager/res
-#Build/Android/KBOmanager/src
-#Build/Android/KBOmanager/gen
-#Build/Android/KBOmanager/bin
 #launch.json
