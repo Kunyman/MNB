@@ -5,21 +5,26 @@ using System.Collections.Generic;
 
 public class HardModeLayer : MonoBehaviour {
 	//UI Components
-	private GameObject m_slot1;
-	private GameObject m_slot2;
-	private GameObject m_slot3;
-	private GameObject m_slot4;
+	private GameObject m_Slot1;
+	private GameObject m_Slot2;
+	private GameObject m_Slot3;
+	private GameObject m_Slot4;
 
-	private GameObject m_historyWindow;
-	private UIScrollView m_historyScrollView;
+	private UIGrid m_NumberSlotGrid;
+	private UIScrollView m_HistoryScrollView;
 
-	private UILabel m_timerLabel;
-	private UILabel m_ballCntLabel;
+	private UILabel m_TimerLabel;
+	private UILabel m_BallCntLabel;
 
 	private UIButton m_GoBtn;
 
 	//Variables
 	private const int BALL_CNT = 4;
+	private const int MAX_SLOT_CNT = 7;
+	private float SLOT_HEIGHT = 78;
+	private int m_CurrentSlotCnt;
+	private Vector3 m_GridPos;
+	private Vector3 m_ScrollViewPos = new Vector3 (0f, 241f, 0f);
 
 	private int m_ballCnt;
 	private float m_timer;
@@ -36,23 +41,23 @@ public class HardModeLayer : MonoBehaviour {
 			case "Scroll_Numberbar":
 				//슬롯 1
 				Transform slot = child.FindChild ("Slotnumber_1").GetComponent< Transform > ();
-				m_slot1 = slot.FindChild ("Grid").gameObject;
-				m_slot1.GetComponent< UICenterOnChild > ().onCenter = GoBtnOnOffCheck;
+				m_Slot1 = slot.FindChild ("Grid").gameObject;
+				m_Slot1.GetComponent< UICenterOnChild > ().onCenter = GoBtnOnOffCheck;
 
 				//슬롯 2
 				slot = child.FindChild ("Slotnumber_2").GetComponent< Transform > ();
-				m_slot2 = slot.FindChild ("Grid").gameObject;
-				m_slot2.GetComponent< UICenterOnChild > ().onCenter = GoBtnOnOffCheck;
+				m_Slot2 = slot.FindChild ("Grid").gameObject;
+				m_Slot2.GetComponent< UICenterOnChild > ().onCenter = GoBtnOnOffCheck;
 
 				//슬롯 3
 				slot = child.FindChild ("Slotnumber_3").GetComponent< Transform > ();
-				m_slot3 = slot.FindChild ("Grid").gameObject;
-				m_slot3.GetComponent< UICenterOnChild > ().onCenter = GoBtnOnOffCheck;
+				m_Slot3 = slot.FindChild ("Grid").gameObject;
+				m_Slot3.GetComponent< UICenterOnChild > ().onCenter = GoBtnOnOffCheck;
 
 				//슬롯 4
 				slot = child.FindChild ("Slotnumber_4").GetComponent< Transform > ();
-				m_slot4 = slot.FindChild ("Grid").gameObject;
-				m_slot4.GetComponent< UICenterOnChild > ().onCenter = GoBtnOnOffCheck;
+				m_Slot4 = slot.FindChild ("Grid").gameObject;
+				m_Slot4.GetComponent< UICenterOnChild > ().onCenter = GoBtnOnOffCheck;
 				break;
 
 			case "Btn_bg":
@@ -60,17 +65,19 @@ public class HardModeLayer : MonoBehaviour {
 				m_GoBtn.isEnabled = false;
 				break;
 
-			case "SlotNumber":
-				m_historyScrollView = child.GetComponent< UIScrollView > ();
-				m_historyWindow = child.FindChild ("Grid").gameObject;
+			case "SlotNumberView":
+				m_HistoryScrollView = child.GetComponent< UIScrollView > ();
+				m_NumberSlotGrid = child.FindChild ("NumberSlotGrid").GetComponent< UIGrid > ();
+				SLOT_HEIGHT = m_NumberSlotGrid.cellHeight;
+				m_GridPos = m_NumberSlotGrid.transform.localPosition;
 				break;
 
 			case "TimeSlot":
-				m_timerLabel = child.FindChild ("TimerLabel").GetComponent< UILabel > ();
+				m_TimerLabel = child.FindChild ("TimerLabel").GetComponent< UILabel > ();
 				break;
 
 			case "BallCnt":
-				m_ballCntLabel = child.FindChild ("CntLabel").GetComponent< UILabel > ();
+				m_BallCntLabel = child.FindChild ("CntLabel").GetComponent< UILabel > ();
 				break;
 			}
 		}
@@ -111,22 +118,22 @@ public class HardModeLayer : MonoBehaviour {
 
 		string inputObjectName;
 
-		if (m_slot1.GetComponent< UICenterOnChild > ().centeredObject == null ||
-			m_slot2.GetComponent< UICenterOnChild > ().centeredObject == null ||
-			m_slot3.GetComponent< UICenterOnChild > ().centeredObject == null ||
-			m_slot4.GetComponent< UICenterOnChild > ().centeredObject == null)
+		if (m_Slot1.GetComponent< UICenterOnChild > ().centeredObject == null ||
+			m_Slot2.GetComponent< UICenterOnChild > ().centeredObject == null ||
+			m_Slot3.GetComponent< UICenterOnChild > ().centeredObject == null ||
+			m_Slot4.GetComponent< UICenterOnChild > ().centeredObject == null)
 			return;
 
-		inputObjectName = m_slot1.GetComponent< UICenterOnChild > ().centeredObject.name;
+		inputObjectName = m_Slot1.GetComponent< UICenterOnChild > ().centeredObject.name;
 		input1 = Convert.ToInt32 (inputObjectName);
 
-		inputObjectName = m_slot2.GetComponent< UICenterOnChild > ().centeredObject.name;
+		inputObjectName = m_Slot2.GetComponent< UICenterOnChild > ().centeredObject.name;
 		input2 = Convert.ToInt32 (inputObjectName);
 	
-		inputObjectName = m_slot3.GetComponent< UICenterOnChild > ().centeredObject.name;
+		inputObjectName = m_Slot3.GetComponent< UICenterOnChild > ().centeredObject.name;
 		input3 = Convert.ToInt32 (inputObjectName);
 	
-		inputObjectName = m_slot4.GetComponent< UICenterOnChild > ().centeredObject.name;
+		inputObjectName = m_Slot4.GetComponent< UICenterOnChild > ().centeredObject.name;
 		input4 = Convert.ToInt32 (inputObjectName);
 
 		m_inputNumber [0] = input1;
@@ -175,18 +182,59 @@ public class HardModeLayer : MonoBehaviour {
 			}
 		}
 
-		if(outCnt == 4)
+		if (strikeCnt == 4) 
 		{
-			Debug.Log ("OUT");
+			GameResultPopup.create ("success");
 		}
-		else if ( strikeCnt == 4 )
+		else 
 		{
-			Debug.Log ("HomeRun");
+			SetWrongAnswer (strikeCnt, ballCnt, outCnt);
 		}
-		else
+	}
+
+	private void SetWrongAnswer(int strikeCnt, int ballCnt, int outCnt)
+	{
+		int number = 0;
+		for (int i = 0; i < BALL_CNT; i++) 
 		{
-			Debug.Log (strikeCnt.ToString () + "S " + ballCnt.ToString () + "B 입니다");
+			number += m_inputNumber [i] * (int)Math.Pow (10, (BALL_CNT - (i + 1)));
 		}
+
+		SetNumberSlot (number, strikeCnt, ballCnt, outCnt);
+	}
+
+	private void SetNumberSlot(int number, int strikeCnt, int ballCnt, int outCnt)
+	{
+		UnityEngine.Object obj = Resources.Load ("numberCheckSlot");
+		GameObject slot = Instantiate (obj) as GameObject;
+		slot.transform.parent = m_NumberSlotGrid.transform;
+		slot.transform.localScale = Vector3.one;
+		slot.transform.localPosition = Vector3.zero;
+
+		slot.GetComponent< NumberCheckSlot > ().SetInfo (number, strikeCnt, ballCnt, outCnt);
+		m_NumberSlotGrid.Reposition ();
+		m_CurrentSlotCnt++;
+
+		ViewPositionUp ();
+	}
+
+	private void ViewPositionUp()
+	{
+		
+		TweenPosition tp = m_NumberSlotGrid.GetComponent< TweenPosition > ();
+
+		tp.from = m_GridPos;
+		m_GridPos.y += SLOT_HEIGHT;
+
+		tp.to = m_GridPos;
+
+		tp.duration = 0.5f;
+		tp.ResetToBeginning ();
+		tp.PlayForward ();
+
+		m_HistoryScrollView.transform.localPosition = m_ScrollViewPos;
+		m_HistoryScrollView.gameObject.GetComponent< UIPanel > ().clipOffset = Vector2.zero;
+
 	}
 
 	public void GoBtnOnOffCheck(GameObject centeredObject)
@@ -212,8 +260,9 @@ public class HardModeLayer : MonoBehaviour {
 		OnGetChildObject ();
 		SetRandomAnswer ();
 
-		m_timerLabel.text = "120";
-		m_ballCntLabel.text = "6";
+		m_TimerLabel.text = "120";
+		m_BallCntLabel.text = "6";
+		m_CurrentSlotCnt = 0;
 	}
 
 	// Use this for initialization

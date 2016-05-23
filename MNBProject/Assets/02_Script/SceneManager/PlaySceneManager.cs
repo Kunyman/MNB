@@ -6,11 +6,15 @@ public class PlaySceneManager : MonoBehaviour {
 	public enum LAYER_TYPE 
 	{
 //		MAIN_LAYER,
+		GAME_START_LAYER,
+		STAGE_LAYER,
 		HARD_MODE_LAYER,
 	}
 
 	private string[] _layerPrefabNameArr = 
 	{
+		"gameStartLayer",
+		"stageLayer",
 		"hardModeLayer",
 	};
 
@@ -119,7 +123,7 @@ public class PlaySceneManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		instance = this;
-		SetLayerType (LAYER_TYPE.HARD_MODE_LAYER);
+		SetLayerType (LAYER_TYPE.GAME_START_LAYER);
 	}
 	
 	// Update is called once per frame
