@@ -14,6 +14,11 @@ public class StageLayer : MonoBehaviour {
 		HelpPopup.create ();
 	}
 
+	public void OnClickedBack()
+	{
+		PlaySceneManager.Instance.SetLayerType (PlaySceneManager.LAYER_TYPE.GAME_START_LAYER);
+	}
+
 	public void onClickedEasyMode()
 	{
 		

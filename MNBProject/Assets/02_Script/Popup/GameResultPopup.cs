@@ -31,7 +31,7 @@ public class GameResultPopup : Popup {
 
 	private void SetLabelData()
 	{
-		m_timeLabel.text = m_remainTime.ToString ("F");
+		m_timeLabel.text = m_remainTime.ToString ("F0");
 		m_ballCntLabel.text = m_remainBallCnt.ToString ();
 	}
 

@@ -17,4 +17,10 @@ public class GameStartCommentPopup : Popup {
 		m_selector = selector;
 	}
 
+	public void OnClickedStart()
+	{
+		m_selector ();
+		PopupManager.Instance.hide ();
+	}
+
 }

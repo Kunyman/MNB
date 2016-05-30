@@ -186,7 +186,6 @@ public class HardModeLayer : MonoBehaviour {
 
 		if (strikeCnt == 4) 
 		{
-			m_stopFlag = true;
 			GameClear ();
 		}
 		else 
@@ -260,11 +259,13 @@ public class HardModeLayer : MonoBehaviour {
 
 	private void GameClear()
 	{
+		m_stopFlag = true;
 		GameResultPopup.create ("success", m_timer, m_ballCnt);
 	}
 
 	private void GameOver()
 	{
+		m_stopFlag = true;
 		GameResultPopup.create ("fail", m_timer, m_ballCnt);		
 	}
 
@@ -283,10 +284,14 @@ public class HardModeLayer : MonoBehaviour {
 			} 
 			else 
 			{
-				m_stopFlag = true;
 				GameOver ();
 			}
 		}
+	}
+
+	public void StartGame()
+	{
+		StartCoroutine (CountTime (1f));
 	}
 
 	public void Resume()
@@ -308,6 +313,12 @@ public class HardModeLayer : MonoBehaviour {
 		GameStopPopup.create (m_timer, m_ballCnt, this.Resume);
 	}
 
+	public void OnClickedHelp()
+	{
+		m_stopFlag = true;
+		HelpPopup.create (this.Resume);
+	}
+
 	void Awake() 
 	{
 		OnGetChildObject ();
@@ -323,7 +334,8 @@ public class HardModeLayer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		StartCoroutine( CountTime(1f) );
+//		StartCoroutine( CountTime(1f) );
+		GameStartCommentPopup.create(this.StartGame);
 	}
 	
 	// Update is called once per frame
