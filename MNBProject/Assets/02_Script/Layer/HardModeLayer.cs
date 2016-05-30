@@ -21,6 +21,7 @@ public class HardModeLayer : MonoBehaviour {
 	//Variables
 	private const int BALL_CNT = 4;
 	private const int MAX_SLOT_CNT = 7;
+	private const float GAME_TIME = 180f;
 	private float SLOT_HEIGHT = 78;
 	private int m_CurrentSlotCnt;
 	private Vector3 m_GridPos;
@@ -184,7 +185,7 @@ public class HardModeLayer : MonoBehaviour {
 
 		if (strikeCnt == 4) 
 		{
-			GameResultPopup.create ("success");
+			GameClear ();
 		}
 		else 
 		{
@@ -201,20 +202,27 @@ public class HardModeLayer : MonoBehaviour {
 		}
 
 		SetNumberSlot (number, strikeCnt, ballCnt, outCnt);
+
+		m_BallCntLabel.text = m_ballCnt.ToString ();
+
+		if (m_ballCnt == 0) 
+		{
+			GameOver ();
+		}
 	}
 
 	private void SetNumberSlot(int number, int strikeCnt, int ballCnt, int outCnt)
 	{
+		
 		UnityEngine.Object obj = Resources.Load ("numberCheckSlot");
 		GameObject slot = Instantiate (obj) as GameObject;
 		slot.transform.parent = m_NumberSlotGrid.transform;
 		slot.transform.localScale = Vector3.one;
-		slot.transform.localPosition = Vector3.zero;
+		slot.transform.localPosition = new Vector3 (0, m_CurrentSlotCnt * (m_NumberSlotGrid.cellHeight) * -1, 0);
 
 		slot.GetComponent< NumberCheckSlot > ().SetInfo (number, strikeCnt, ballCnt, outCnt);
-		m_NumberSlotGrid.Reposition ();
+//		m_NumberSlotGrid.Reposition ();
 		m_CurrentSlotCnt++;
-
 		ViewPositionUp ();
 	}
 
@@ -249,8 +257,36 @@ public class HardModeLayer : MonoBehaviour {
 		}
 	}
 
+	private void GameClear()
+	{
+		GameResultPopup.create ("success");
+	}
+
+	private void GameOver()
+	{
+		GameResultPopup.create ("fail");		
+	}
+
+	IEnumerator CountTime(float sec)
+	{
+		yield return new WaitForSeconds (sec);
+
+		m_timer--;
+
+		if (m_timer >= 0) 
+		{
+			m_TimerLabel.text = m_timer.ToString ();
+			StartCoroutine (CountTime (sec));
+		}
+		else 
+		{
+			GameOver ();
+		}
+	}
+
 	public void OnClickedGo()
 	{
+		m_ballCnt--;
 		GetInputNumber ();
 		CheckAnswer ();
 	}
@@ -260,14 +296,17 @@ public class HardModeLayer : MonoBehaviour {
 		OnGetChildObject ();
 		SetRandomAnswer ();
 
-		m_TimerLabel.text = "120";
-		m_BallCntLabel.text = "6";
+		m_timer = GAME_TIME;
+		m_ballCnt = 6;
+
+		m_TimerLabel.text = m_timer.ToString();
+		m_BallCntLabel.text = m_ballCnt.ToString();
 		m_CurrentSlotCnt = 0;
 	}
 
 	// Use this for initialization
 	void Start () {
-	
+		StartCoroutine( CountTime(1f) );
 	}
 	
 	// Update is called once per frame
