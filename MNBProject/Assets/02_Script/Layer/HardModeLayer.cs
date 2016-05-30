@@ -29,6 +29,7 @@ public class HardModeLayer : MonoBehaviour {
 
 	private int m_ballCnt;
 	private float m_timer;
+	private bool m_stopFlag = false;
 
 	private int[] m_answer = new int[BALL_CNT];
 	private int[] m_inputNumber = new int[BALL_CNT];
@@ -185,6 +186,7 @@ public class HardModeLayer : MonoBehaviour {
 
 		if (strikeCnt == 4) 
 		{
+			m_stopFlag = true;
 			GameClear ();
 		}
 		else 
@@ -213,7 +215,6 @@ public class HardModeLayer : MonoBehaviour {
 
 	private void SetNumberSlot(int number, int strikeCnt, int ballCnt, int outCnt)
 	{
-		
 		UnityEngine.Object obj = Resources.Load ("numberCheckSlot");
 		GameObject slot = Instantiate (obj) as GameObject;
 		slot.transform.parent = m_NumberSlotGrid.transform;
@@ -259,29 +260,39 @@ public class HardModeLayer : MonoBehaviour {
 
 	private void GameClear()
 	{
-		GameResultPopup.create ("success");
+		GameResultPopup.create ("success", m_timer, m_ballCnt);
 	}
 
 	private void GameOver()
 	{
-		GameResultPopup.create ("fail");		
+		GameResultPopup.create ("fail", m_timer, m_ballCnt);		
 	}
 
 	IEnumerator CountTime(float sec)
 	{
 		yield return new WaitForSeconds (sec);
 
-		m_timer--;
+		if (!m_stopFlag) 
+		{
+			m_timer--;
 
-		if (m_timer >= 0) 
-		{
-			m_TimerLabel.text = m_timer.ToString ();
-			StartCoroutine (CountTime (sec));
+			if (m_timer >= 0) 
+			{
+				m_TimerLabel.text = m_timer.ToString ();
+				StartCoroutine (CountTime (sec));
+			} 
+			else 
+			{
+				m_stopFlag = true;
+				GameOver ();
+			}
 		}
-		else 
-		{
-			GameOver ();
-		}
+	}
+
+	public void Resume()
+	{
+		m_stopFlag = false;
+		StartCoroutine (CountTime (1f));
 	}
 
 	public void OnClickedGo()
@@ -291,13 +302,19 @@ public class HardModeLayer : MonoBehaviour {
 		CheckAnswer ();
 	}
 
+	public void OnClickedStop()
+	{
+		m_stopFlag = true;
+		GameStopPopup.create (m_timer, m_ballCnt, this.Resume);
+	}
+
 	void Awake() 
 	{
 		OnGetChildObject ();
 		SetRandomAnswer ();
 
 		m_timer = GAME_TIME;
-		m_ballCnt = 6;
+		m_ballCnt = 10;
 
 		m_TimerLabel.text = m_timer.ToString();
 		m_BallCntLabel.text = m_ballCnt.ToString();
