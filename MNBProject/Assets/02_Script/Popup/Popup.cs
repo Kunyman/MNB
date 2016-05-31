@@ -5,7 +5,6 @@ public class Popup : MonoBehaviour {
 
 	public delegate void Callback ();
 
-
 	public virtual void onClickedClose()
 	{
 		PopupManager.Instance.hide ();
