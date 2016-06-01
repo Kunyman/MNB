@@ -17,11 +17,11 @@ public class GameResultPopup : Popup {
 	{
 		GameObject popup = PopupManager.Instance.show ("gameResultPopup");
 		GameResultPopup gameResultPopup = popup.GetComponent< GameResultPopup > ();
-		gameResultPopup.SetCaseString (caseString, remainTime, remainBallCnt, selector);
+		gameResultPopup.SetInfo (caseString, remainTime, remainBallCnt, selector);
 		gameResultPopup.SetLabelData ();
 	}
 
-	private void SetCaseString(string caseString, float remainTime, int remainBallCnt,  Callback selector = null)
+	private void SetInfo(string caseString, float remainTime, int remainBallCnt,  Callback selector = null)
 	{
 		m_remainTime = remainTime;
 		m_remainBallCnt = remainBallCnt;
@@ -65,6 +65,16 @@ public class GameResultPopup : Popup {
 	{
 		PopupManager.Instance.hide ();
 		PlaySceneManager.Instance.SetLayerType (PlaySceneManager.LAYER_TYPE.HARD_MODE_LAYER);
+	}
+
+	public void OnClickedTimeUp()
+	{
+		AdResultPopup.create ("time");
+	}
+
+	public void OnClickedCountUp()
+	{
+		AdResultPopup.create ("count");
 	}
 
 	void Awake ()

@@ -276,10 +276,9 @@ public class HardModeLayer : MonoBehaviour {
 		if (!m_stopFlag) 
 		{
 			m_timer--;
-
-			if (m_timer >= 0) 
+			m_TimerLabel.text = m_timer.ToString ();
+			if (m_timer > 0) 
 			{
-				m_TimerLabel.text = m_timer.ToString ();
 				StartCoroutine (CountTime (sec));
 			} 
 			else 

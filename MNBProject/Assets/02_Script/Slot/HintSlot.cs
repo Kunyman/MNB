@@ -30,7 +30,7 @@ public class HintSlot : MonoBehaviour {
 		
 		m_colors [0] = Color.white;
 		m_colors [1] = Color.yellow;
-		m_colors [2] = Color.blue;
+		m_colors [2] = new Color(0f,149f,255f,255f);
 		m_colors [3] = Color.red;
 	}
 

@@ -38,6 +38,16 @@ public class GameStopPopup : Popup {
 		PlaySceneManager.Instance.SetLayerType (PlaySceneManager.LAYER_TYPE.STAGE_LAYER);
 	}
 
+	public void OnClickedTimeUp()
+	{
+		AdResultPopup.create ("time");
+	}
+
+	public void OnClickedCountUp()
+	{
+		AdResultPopup.create ("count");
+	}
+
 	public void OnClickedResume()
 	{
 		m_selector ();
