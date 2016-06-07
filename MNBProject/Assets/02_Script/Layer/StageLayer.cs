@@ -21,7 +21,7 @@ public class StageLayer : MonoBehaviour {
 
 	public void onClickedEasyMode()
 	{
-		
+		PlaySceneManager.Instance.SetLayerType (PlaySceneManager.LAYER_TYPE.EASY_MODE_LAYER);
 	}
 
 	public void onClickedHardMode()

@@ -3,12 +3,11 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-public class HardModeLayer : MonoBehaviour {
-	//UI Components
+public class EasyModeLayer : MonoBehaviour {
+
 	private GameObject m_Slot1;
 	private GameObject m_Slot2;
 	private GameObject m_Slot3;
-	private GameObject m_Slot4;
 
 	private UIGrid m_NumberSlotGrid;
 	private UIScrollView m_HistoryScrollView;
@@ -18,10 +17,10 @@ public class HardModeLayer : MonoBehaviour {
 
 	private UIButton m_GoBtn;
 
-	//Variables
-	private const int SLOT_CNT = 4;
-	//게임 시간&횟수 
-	private const float GAME_TIME = 180f;
+	//숫자 갯수
+	private const int SLOT_CNT = 3;
+	//게임 시간 & 횟수 
+	private const float GAME_TIME = 0f;
 	private const int GAME_CNT = 10;
 	private float SLOT_HEIGHT = 78;
 	private int m_CurrentSlotCnt;
@@ -57,10 +56,6 @@ public class HardModeLayer : MonoBehaviour {
 				m_Slot3 = slot.FindChild ("Grid").gameObject;
 				m_Slot3.GetComponent< UICenterOnChild > ().onCenter = GoBtnOnOffCheck;
 
-				//슬롯 4
-				slot = child.FindChild ("Slotnumber_4").GetComponent< Transform > ();
-				m_Slot4 = slot.FindChild ("Grid").gameObject;
-				m_Slot4.GetComponent< UICenterOnChild > ().onCenter = GoBtnOnOffCheck;
 				break;
 
 			case "Btn_bg":
@@ -109,7 +104,7 @@ public class HardModeLayer : MonoBehaviour {
 		{
 			m_answer [i] = number [i];
 		}
-		Debug.Log (m_answer[0].ToString() + m_answer[1].ToString() + m_answer[2].ToString() + m_answer[3].ToString());
+		Debug.Log (m_answer[0].ToString() + m_answer[1].ToString() + m_answer[2].ToString());
 
 	}
 
@@ -117,14 +112,13 @@ public class HardModeLayer : MonoBehaviour {
 	{
 		int inputNumber;
 
-		int input1, input2, input3, input4;
+		int input1, input2, input3;
 
 		string inputObjectName;
 
 		if (m_Slot1.GetComponent< UICenterOnChild > ().centeredObject == null ||
 			m_Slot2.GetComponent< UICenterOnChild > ().centeredObject == null ||
-			m_Slot3.GetComponent< UICenterOnChild > ().centeredObject == null ||
-			m_Slot4.GetComponent< UICenterOnChild > ().centeredObject == null)
+			m_Slot3.GetComponent< UICenterOnChild > ().centeredObject == null )
 			return;
 
 		inputObjectName = m_Slot1.GetComponent< UICenterOnChild > ().centeredObject.name;
@@ -132,25 +126,21 @@ public class HardModeLayer : MonoBehaviour {
 
 		inputObjectName = m_Slot2.GetComponent< UICenterOnChild > ().centeredObject.name;
 		input2 = Convert.ToInt32 (inputObjectName);
-	
+
 		inputObjectName = m_Slot3.GetComponent< UICenterOnChild > ().centeredObject.name;
 		input3 = Convert.ToInt32 (inputObjectName);
-	
-		inputObjectName = m_Slot4.GetComponent< UICenterOnChild > ().centeredObject.name;
-		input4 = Convert.ToInt32 (inputObjectName);
 
 		m_inputNumber [0] = input1;
 		m_inputNumber [1] = input2;
 		m_inputNumber [2] = input3;
-		m_inputNumber [3] = input4;
 
-		Debug.Log (input1.ToString () + input2.ToString () + input3.ToString () + input4.ToString ());
+		Debug.Log (input1.ToString () + input2.ToString () + input3.ToString ());
 	}
 
 	private bool DuplicationCheck()
 	{
 		GetInputNumber ();
-		
+
 		for (int i = 0; i < SLOT_CNT-1; i++) 
 		{
 			for (int j = (i + 1); j < SLOT_CNT; j++) 
@@ -185,7 +175,7 @@ public class HardModeLayer : MonoBehaviour {
 			}
 		}
 
-		if (strikeCnt == 4) 
+		if (strikeCnt == SLOT_CNT) 
 		{
 			GameClear ();
 		}
@@ -215,21 +205,21 @@ public class HardModeLayer : MonoBehaviour {
 
 	private void SetNumberSlot(int number, int strikeCnt, int ballCnt, int outCnt)
 	{
-		UnityEngine.Object obj = Resources.Load ("numberCheckSlotHard");
+		UnityEngine.Object obj = Resources.Load ("numberCheckSlotEasy");
 		GameObject slot = Instantiate (obj) as GameObject;
 		slot.transform.parent = m_NumberSlotGrid.transform;
 		slot.transform.localScale = Vector3.one;
 		slot.transform.localPosition = new Vector3 (0, m_CurrentSlotCnt * (m_NumberSlotGrid.cellHeight) * -1, 0);
 
-		slot.GetComponent< NumberCheckSlotHard > ().SetInfo (number, strikeCnt, ballCnt, outCnt);
-//		m_NumberSlotGrid.Reposition ();
+		slot.GetComponent< NumberCheckSlotEasy > ().SetInfo (number, strikeCnt, ballCnt, outCnt);
+		//		m_NumberSlotGrid.Reposition ();
 		m_CurrentSlotCnt++;
 		ViewPositionUp ();
 	}
 
 	private void ViewPositionUp()
 	{
-		
+
 		TweenPosition tp = m_NumberSlotGrid.GetComponent< TweenPosition > ();
 
 		tp.from = m_GridPos;
@@ -261,13 +251,13 @@ public class HardModeLayer : MonoBehaviour {
 	private void GameClear()
 	{
 		m_stopFlag = true;
-		GameResultPopup.create ("success", m_timer, m_ballCnt, PlaySceneManager.LAYER_TYPE.HARD_MODE_LAYER);
+		GameResultPopup.create ("success", m_timer, m_ballCnt, PlaySceneManager.LAYER_TYPE.EASY_MODE_LAYER);
 	}
 
 	private void GameOver()
 	{
 		m_stopFlag = true;
-		GameResultPopup.create ("fail", m_timer, m_ballCnt, PlaySceneManager.LAYER_TYPE.HARD_MODE_LAYER);		
+		GameResultPopup.create ("fail", m_timer, m_ballCnt, PlaySceneManager.LAYER_TYPE.EASY_MODE_LAYER);		
 	}
 
 	IEnumerator CountTime(float sec)
@@ -276,16 +266,10 @@ public class HardModeLayer : MonoBehaviour {
 
 		if (!m_stopFlag) 
 		{
-			m_timer--;
+			m_timer++;
 			m_TimerLabel.text = m_timer.ToString ();
-			if (m_timer > 0) 
-			{
-				StartCoroutine (CountTime (sec));
-			} 
-			else 
-			{
-				GameOver ();
-			}
+
+			StartCoroutine (CountTime (sec));
 		}
 	}
 
@@ -334,9 +318,11 @@ public class HardModeLayer : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-//		StartCoroutine( CountTime(1f) );
+		//		StartCoroutine( CountTime(1f) );
 		GameStartCommentPopup.create(this.StartGame);
 	}
+
+
 	
 	// Update is called once per frame
 	void Update () {

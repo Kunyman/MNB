@@ -9,6 +9,7 @@ public class PlaySceneManager : MonoBehaviour {
 		GAME_START_LAYER,
 		STAGE_LAYER,
 		HARD_MODE_LAYER,
+		EASY_MODE_LAYER,
 	}
 
 	private string[] _layerPrefabNameArr = 
@@ -16,6 +17,7 @@ public class PlaySceneManager : MonoBehaviour {
 		"gameStartLayer",
 		"stageLayer",
 		"hardModeLayer",
+		"easyModeLayer"
 	};
 
 	private HardModeLayer m_hardModeLayer;
