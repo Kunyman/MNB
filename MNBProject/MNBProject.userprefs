@@ -1,16 +1,20 @@
 ﻿<Properties StartupItem="Assembly-CSharp.csproj">
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/02_Script/Layer/HardModeLayer.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/02_Script/Layer/EasyModeLayer.cs">
     <Files>
+      <File FileName="Assets/02_Script/Layer/HardModeLayer.cs" Line="1" Column="1" />
       <File FileName="Assets/02_Script/Layer/GameStartLayer.cs" Line="1" Column="1" />
       <File FileName="Assets/02_Script/Layer/StageLayer.cs" Line="1" Column="1" />
       <File FileName="Assets/02_Script/Slot/NumberCheckSlot.cs" Line="1" Column="1" />
-      <File FileName="Assets/02_Script/Layer/HardModeLayer.cs" Line="309" Column="35" />
-      <File FileName="Assets/02_Script/Popup/GameResultPopup.cs" Line="16" Column="3" />
+      <File FileName="Assets/02_Script/Popup/GameResultPopup.cs" Line="1" Column="1" />
+      <File FileName="Assets/NGUI/Scripts/Tweening/UITweener.cs" Line="1" Column="1" />
+      <File FileName="Assets/02_Script/Layer/EasyModeLayer.cs" Line="44" Column="25" />
+      <File FileName="Assets/NGUI/Scripts/Interaction/UIPlayTween.cs" Line="1" Column="1" />
+      <File FileName="Assets/02_Script/Popup/GameStopPopup.cs" Line="18" Column="40" />
       <File FileName="Assets/02_Script/SceneManager/PlaySceneManager.cs" Line="1" Column="1" NotebookId="1" />
       <File FileName="Assets/02_Script/Popup/PopupManager.cs" Line="1" Column="1" NotebookId="1" />
       <File FileName="Assets/02_Script/Popup/HelpPopup.cs" Line="1" Column="1" NotebookId="1" />
-      <File FileName="Assets/02_Script/Popup/Popup.cs" Line="4" Column="31" NotebookId="1" />
+      <File FileName="Assets/02_Script/Popup/Popup.cs" Line="1" Column="1" NotebookId="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

@@ -18,6 +18,8 @@ public class HardModeLayer : MonoBehaviour {
 
 	private UIButton m_GoBtn;
 
+	private TweenAlpha m_wrongEff;
+
 	//Variables
 	private const int SLOT_CNT = 4;
 	//게임 시간&횟수 
@@ -41,6 +43,9 @@ public class HardModeLayer : MonoBehaviour {
 
 		foreach (Transform child in transforms) {
 			switch (child.name) {
+			case "CountBloodEffect":
+				m_wrongEff = child.FindChild ("countBloodEff").GetComponent< TweenAlpha > ();
+				break;
 			case "Scroll_Numberbar":
 				//슬롯 1
 				Transform slot = child.FindChild ("Slotnumber_1").GetComponent< Transform > ();
@@ -192,6 +197,7 @@ public class HardModeLayer : MonoBehaviour {
 		else 
 		{
 			SetWrongAnswer (strikeCnt, ballCnt, outCnt);
+			PlayWrongEff ();
 		}
 	}
 
@@ -211,6 +217,14 @@ public class HardModeLayer : MonoBehaviour {
 		{
 			GameOver ();
 		}
+	}
+
+	private void PlayWrongEff()
+	{
+		m_wrongEff.ResetToBeginning ();
+		m_wrongEff.enabled = true;
+		m_wrongEff.style = UITweener.Style.Once;
+		m_wrongEff.PlayForward ();
 	}
 
 	private void SetNumberSlot(int number, int strikeCnt, int ballCnt, int outCnt)

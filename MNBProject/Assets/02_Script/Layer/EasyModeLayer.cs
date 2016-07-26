@@ -17,6 +17,8 @@ public class EasyModeLayer : MonoBehaviour {
 
 	private UIButton m_GoBtn;
 
+	private TweenAlpha m_wrongEff;
+
 	//숫자 갯수
 	private const int SLOT_CNT = 3;
 	//게임 시간 & 횟수 
@@ -40,6 +42,9 @@ public class EasyModeLayer : MonoBehaviour {
 
 		foreach (Transform child in transforms) {
 			switch (child.name) {
+			case "CountBloodEffect":
+				m_wrongEff = child.FindChild ("countBloodEff").GetComponent< TweenAlpha > ();
+				break;
 			case "Scroll_Numberbar":
 				//슬롯 1
 				Transform slot = child.FindChild ("Slotnumber_1").GetComponent< Transform > ();
@@ -182,6 +187,7 @@ public class EasyModeLayer : MonoBehaviour {
 		else 
 		{
 			SetWrongAnswer (strikeCnt, ballCnt, outCnt);
+			PlayWrongEff ();
 		}
 	}
 
@@ -202,6 +208,15 @@ public class EasyModeLayer : MonoBehaviour {
 			GameOver ();
 		}
 	}
+
+	private void PlayWrongEff()
+	{
+		m_wrongEff.ResetToBeginning ();
+		m_wrongEff.enabled = true;
+		m_wrongEff.style = UITweener.Style.Once;
+		m_wrongEff.PlayForward ();
+	}
+
 
 	private void SetNumberSlot(int number, int strikeCnt, int ballCnt, int outCnt)
 	{
