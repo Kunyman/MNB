@@ -50,8 +50,8 @@ public class GameResultPopup : Popup {
 				break;
 
 			case "Score":
-				m_timeLabel = child.FindChild ("time").FindChild ("Sprite_text").FindChild ("Label_count").GetComponent<UILabel> ();
-				m_ballCntLabel = child.FindChild ("count").FindChild ("Sprite_text").FindChild ("Label_count").GetComponent<UILabel> ();
+				m_timeLabel = child.Find ("time").Find ("Sprite_text").Find ("Label_count").GetComponent<UILabel> ();
+				m_ballCntLabel = child.Find ("count").Find ("Sprite_text").Find ("Label_count").GetComponent<UILabel> ();
 				break;
 			}
 		}

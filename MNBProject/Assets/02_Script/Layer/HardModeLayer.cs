@@ -44,48 +44,48 @@ public class HardModeLayer : MonoBehaviour {
 		foreach (Transform child in transforms) {
 			switch (child.name) {
 			case "CountBloodEffect":
-				m_wrongEff = child.FindChild ("countBloodEff").GetComponent< TweenAlpha > ();
+				m_wrongEff = child.Find ("countBloodEff").GetComponent< TweenAlpha > ();
 				break;
 			case "Scroll_Numberbar":
 				//슬롯 1
-				Transform slot = child.FindChild ("Slotnumber_1").GetComponent< Transform > ();
-				m_Slot1 = slot.FindChild ("Grid").gameObject;
+				Transform slot = child.Find ("Slotnumber_1").GetComponent< Transform > ();
+				m_Slot1 = slot.Find ("Grid").gameObject;
 				m_Slot1.GetComponent< UICenterOnChild > ().onCenter = GoBtnOnOffCheck;
 
 				//슬롯 2
-				slot = child.FindChild ("Slotnumber_2").GetComponent< Transform > ();
-				m_Slot2 = slot.FindChild ("Grid").gameObject;
+				slot = child.Find ("Slotnumber_2").GetComponent< Transform > ();
+				m_Slot2 = slot.Find ("Grid").gameObject;
 				m_Slot2.GetComponent< UICenterOnChild > ().onCenter = GoBtnOnOffCheck;
 
 				//슬롯 3
-				slot = child.FindChild ("Slotnumber_3").GetComponent< Transform > ();
-				m_Slot3 = slot.FindChild ("Grid").gameObject;
+				slot = child.Find ("Slotnumber_3").GetComponent< Transform > ();
+				m_Slot3 = slot.Find ("Grid").gameObject;
 				m_Slot3.GetComponent< UICenterOnChild > ().onCenter = GoBtnOnOffCheck;
 
 				//슬롯 4
-				slot = child.FindChild ("Slotnumber_4").GetComponent< Transform > ();
-				m_Slot4 = slot.FindChild ("Grid").gameObject;
+				slot = child.Find ("Slotnumber_4").GetComponent< Transform > ();
+				m_Slot4 = slot.Find ("Grid").gameObject;
 				m_Slot4.GetComponent< UICenterOnChild > ().onCenter = GoBtnOnOffCheck;
 				break;
 
 			case "Btn_bg":
-				m_GoBtn = child.FindChild ("btn_go").GetComponent< UIButton > ();
+				m_GoBtn = child.Find ("btn_go").GetComponent< UIButton > ();
 				m_GoBtn.isEnabled = false;
 				break;
 
 			case "SlotNumberView":
 				m_HistoryScrollView = child.GetComponent< UIScrollView > ();
-				m_NumberSlotGrid = child.FindChild ("NumberSlotGrid").GetComponent< UIGrid > ();
+				m_NumberSlotGrid = child.Find ("NumberSlotGrid").GetComponent< UIGrid > ();
 				SLOT_HEIGHT = m_NumberSlotGrid.cellHeight;
 				m_GridPos = m_NumberSlotGrid.transform.localPosition;
 				break;
 
 			case "TimeSlot":
-				m_TimerLabel = child.FindChild ("TimerLabel").GetComponent< UILabel > ();
+				m_TimerLabel = child.Find ("TimerLabel").GetComponent< UILabel > ();
 				break;
 
 			case "BallCnt":
-				m_BallCntLabel = child.FindChild ("CntLabel").GetComponent< UILabel > ();
+				m_BallCntLabel = child.Find ("CntLabel").GetComponent< UILabel > ();
 				break;
 			}
 		}
